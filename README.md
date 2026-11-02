@@ -12,3 +12,7 @@ About TP4: This exercise was used to implement primitives that provide confident
 Three modes of the encrypt-then-mac, encrypt-and-mac and mac-then-encrypt scheme were implemented.
 
 
+
+## Laboratório de redes: Diffie-Hellman
+
+[Abre a prática e as instruções de arranque](Pratica_2_Diffie_Hellman/README.md). Inclui a ficha por desafios, os programas Python completos e análise com Wireshark.
