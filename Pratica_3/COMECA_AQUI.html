@@ -1,0 +1,72 @@
+<!doctype html><html lang="pt-PT"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Operação Rede em Risco</title><style>:root{color-scheme:light}*{box-sizing:border-box}body{margin:0;background:#f4f3ef;color:#202e39;font:17px/1.65 system-ui,sans-serif}main{max-width:1000px;margin:40px auto;padding:48px 64px;background:white;border-top:7px solid #157b78}nav{display:flex;flex-wrap:wrap;gap:16px;font-size:14px;border-bottom:1px solid #ddd;padding-bottom:18px}a{color:#096b70}h1{font-size:38px;line-height:1.15;letter-spacing:-1px}h2{margin-top:50px;padding-top:16px;border-top:1px solid #dbe4e2;font-size:26px}h3{font-size:21px}pre{background:#edf3f3;border-left:4px solid #157b78;padding:16px;white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}code{font-size:.88em}table{border-collapse:collapse;width:100%;font-size:14px;display:block;overflow-x:auto}th,td{border:1px solid #d5dfdf;padding:10px 12px;text-align:left}th{background:#e4efed}li{margin:.45em 0}strong{color:#123f45}@media(max-width:700px){main{margin:0;padding:24px}h1{font-size:30px}}@media print{body{background:white;font-size:11pt}main{margin:0;padding:0;border:0;max-width:none}nav{display:none}h2,h3{break-after:avoid}pre,tr{break-inside:avoid}a{color:inherit;text-decoration:none}}</style><main><nav><a href="COMECA_AQUI.html">COMECA AQUI</a><a href="FICHA_RESPOSTAS.html">FICHA RESPOSTAS</a><a href="MISSAO.html">MISSAO</a><a href="PISTAS.html">PISTAS</a></nav><h1>Operação Rede em Risco</h1>
+<p>Laboratório integrado de redes, criptografia e segurança Web · Trabalho em pares</p>
+<p>Uma empresa fictícia comunica através de um chat antigo e guarda documentos numa aplicação Web. A direção diz: «Temos cifras e palavras-passe, por isso estamos seguros.» A vossa equipa tem de testar essa afirmação e recomendar correções com provas.</p>
+<p>As aplicações são bancadas separadas da mesma auditoria: não partilham utilizadores, sessões ou chaves. O cenário liga os resultados; não existe uma cadeia automática em que uma ferramenta desbloqueia a seguinte.</p>
+<p><strong>Objetivo:</strong> realizar uma auditoria de hacking ético, demonstrar falhas com provas e validar correções nas bancadas fornecidas. Na missão Web, investigas as três bancadas e documentas pelo menos duas descobertas diferentes.</p>
+<p><strong>Não tens de programar, completar funções nem editar ficheiros Python.</strong> Só vais executar comandos, introduzir dados nas ferramentas, usar o navegador e o Wireshark e responder na ficha. Copiar um comando de execução não implica compreender o código do programa.</p>
+<h2>Preparação</h2>
+<p>Extrai o ZIP e abre um terminal na pasta <code>alunos</code> que contém este documento. Precisas de Python 3.10 ou posterior e Wireshark. Usa apenas dados fictícios e as aplicações fornecidas; a componente Web fica em localhost. O chat só deve ser usado na rede de laboratório autorizada.</p>
+<p>Windows, PowerShell ou CMD:</p>
+<pre><code class="language-text">py -3 -m venv .venv
+.venv\Scripts\python.exe -m pip install -r requirements.txt
+</code></pre>
+<p>macOS/Linux:</p>
+<pre><code class="language-text">python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+</code></pre>
+<p><strong>Convenção nos documentos:</strong> os exemplos usam <code>.venv/bin/python</code>, para macOS/Linux. No Windows substitui esse início por <code>.venv\Scripts\python.exe</code>. Mantém o resto do comando igual. Não precisas de ativar o ambiente virtual. Em cada terminal novo, abre novamente a pasta <code>alunos</code>; mantém todos os terminais nessa pasta.</p>
+<h2>Organização</h2>
+<ul>
+<li>Abre <code>MISSAO.html</code> para seguir os desafios e o contrato da auditoria Web.</li>
+<li>Se precisares de apoio na investigação, usa <code>PISTAS.html</code>, começando pelo nível 1.</li>
+<li>Regista os resultados em <code>FICHA_RESPOSTAS.md</code> ou num documento à tua escolha.</li>
+<li>Cria uma pasta <code>evidencias</code> para as capturas.</li>
+<li>Um elemento opera e o outro recolhe provas; troquem de função a meio.</li>
+<li>Interrompe um servidor com Ctrl+C antes de iniciar o seguinte.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Serviço</th>
+<th align="right">Porta</th>
+<th>Local</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Chat por substituição</td>
+<td align="right">5001</td>
+<td>Mesmo computador ou rede de laboratório</td>
+</tr>
+<tr>
+<td>Bob / Diffie–Hellman</td>
+<td align="right">5050</td>
+<td>Mesmo computador</td>
+</tr>
+<tr>
+<td>Mallory / intermediário explícito</td>
+<td align="right">6060</td>
+<td>Mesmo computador</td>
+</tr>
+<tr>
+<td>Aplicações Web, uma de cada vez</td>
+<td align="right">5080</td>
+<td>Mesmo computador</td>
+</tr>
+</tbody></table>
+<p>No mesmo computador, usa <code>127.0.0.1</code> como destino. No Wireshark, captura na interface loopback: <code>lo0</code> no Mac, <code>lo</code> no Linux ou o adaptador de loopback Npcap no Windows. Se não existir no Windows, confirma que o suporte Npcap está instalado; pede apoio à docente. Para o chat entre computadores, usa a interface de rede ativa e substitui o destino pelo IPv4 real do servidor.</p>
+<p><strong>Filtros de captura:</strong> <code>tcp port 5001</code>, <code>tcp port 5050 or tcp port 6060</code> ou <code>tcp port 5080</code>.</p>
+<p><strong>Filtros de visualização:</strong> <code>tcp.port == 5001</code>, <code>tcp.port == 5050 || tcp.port == 6060</code> ou <code>tcp.port == 5080</code>.</p>
+<h2>Se algo falhar</h2>
+<ul>
+<li>«Ficheiro não encontrado»: confirma que estás na pasta <code>alunos</code>.</li>
+<li>«No module named ...»: repete a instalação com o Python do ambiente virtual.</li>
+<li>«Connection refused»: verifica se o servidor arrancou, o IP e a porta.</li>
+<li>«Timed out»: verifica IP, serviço e regras da rede; não desligues a firewall indiscriminadamente.</li>
+<li>«Address already in use»: encerra a execução anterior. As portas do guião já evitam a 5000.</li>
+<li>Não aparece tráfego: confirma a interface, inicia a captura antes da experiência e verifica o filtro.</li>
+<li>Para veres o conteúdo TCP: seleciona um pacote e usa <strong>Follow &gt; TCP Stream</strong>. Ao mudar de conversa, remove o filtro de stream anterior.</li>
+<li>Se uma instalação bloquear o grupo, usa o posto preparado pela docente para recolher a prova e continua a análise. Regista essa alternativa.</li>
+</ul>
+<h2>Entrega</h2>
+<p>Submete um ZIP com a ficha preenchida e as evidências. Não incluas <code>.venv</code>, os programas fornecidos ou dados reais. Cada conclusão deve indicar a evidência que a suporta. Uma captura sem explicação não fecha o diagnóstico.</p>
+</main></html>

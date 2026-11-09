@@ -1,0 +1,156 @@
+<!doctype html><html lang="pt-PT"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Operação Rede em Risco — missão dos analistas</title><style>:root{color-scheme:light}*{box-sizing:border-box}body{margin:0;background:#f4f3ef;color:#202e39;font:17px/1.65 system-ui,sans-serif}main{max-width:1000px;margin:40px auto;padding:48px 64px;background:white;border-top:7px solid #157b78}nav{display:flex;flex-wrap:wrap;gap:16px;font-size:14px;border-bottom:1px solid #ddd;padding-bottom:18px}a{color:#096b70}h1{font-size:38px;line-height:1.15;letter-spacing:-1px}h2{margin-top:50px;padding-top:16px;border-top:1px solid #dbe4e2;font-size:26px}h3{font-size:21px}pre{background:#edf3f3;border-left:4px solid #157b78;padding:16px;white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}code{font-size:.88em}table{border-collapse:collapse;width:100%;font-size:14px;display:block;overflow-x:auto}th,td{border:1px solid #d5dfdf;padding:10px 12px;text-align:left}th{background:#e4efed}li{margin:.45em 0}strong{color:#123f45}@media(max-width:700px){main{margin:0;padding:24px}h1{font-size:30px}}@media print{body{background:white;font-size:11pt}main{margin:0;padding:0;border:0;max-width:none}nav{display:none}h2,h3{break-after:avoid}pre,tr{break-inside:avoid}a{color:inherit;text-decoration:none}}</style><main><nav><a href="COMECA_AQUI.html">COMECA AQUI</a><a href="FICHA_RESPOSTAS.html">FICHA RESPOSTAS</a><a href="MISSAO.html">MISSAO</a><a href="PISTAS.html">PISTAS</a></nav><h1>Operação Rede em Risco — missão dos analistas</h1>
+<p><strong>Pergunta central:</strong> em que pontos se consegue ler, alterar ou obter informação que devia estar protegida?</p>
+<p>Segue a preparação em <code>COMECA_AQUI.md</code>. Os comandos partem sempre da pasta <code>alunos</code>. Em Windows, troca <code>.venv/bin/python</code> por <code>.venv\Scripts\python.exe</code>.</p>
+<p>Em cada desafio: <strong>prevê → executa → recolhe a prova → conclui</strong>. Não alteres código. Nos resultados automáticos, escolhe os dados que respondem à pergunta: não copies toda a saída.</p>
+<h2>1. O chat antigo protege a conversa?</h2>
+<p><strong>Prevê:</strong> se a captura não mostrar palavras legíveis, isso basta para afirmar que a conversa está segura?</p>
+<p>Abre três terminais na pasta <code>alunos</code>. No primeiro, inicia o servidor:</p>
+<pre><code class="language-text">.venv/bin/python ferramentas/TP1/comunicacao/chat.py servidor
+</code></pre>
+<p>No segundo e no terceiro:</p>
+<pre><code class="language-text">.venv/bin/python ferramentas/TP1/comunicacao/chat.py cliente 127.0.0.1
+</code></pre>
+<p>Escolhe nomes diferentes. Captura na interface loopback com <code>tcp port 5001</code>. Espera que ambos estejam ligados. Um cliente envia <code>REUNIAO NA SALA DE REDES</code>; o outro responde <code>RECEBIDO</code>. Guarda <code>01_chat.pcapng</code>.</p>
+<p>No Wireshark, identifica o texto que passou no fio. Compara-o com o texto apresentado na receção e com a linha «CIFRAÇÃO» no emissor. Regista os IP e as portas de uma ligação.</p>
+<p>Depois executa:</p>
+<pre><code class="language-text">.venv/bin/python ferramentas/Pratica_1/challenge-01/caesar_breaker.py
+.venv/bin/python ferramentas/TP1/cifra_substituicao.py
+.venv/bin/python ferramentas/TP1/vigenere_demo.py
+</code></pre>
+<p>O primeiro apresenta candidatos de César; identifica o que faz sentido e a chave. O segundo usa o mapa já fornecido no TP1 para apresentar uma tentativa de decifração de um texto de substituição; não é um ataque automático ao chat. No terceiro, escolhe decifrar, introduz a chave <code>REDE</code> e a mensagem <code>IIGIJ</code>. Volta a cifrar o resultado com a mesma chave para confirmar.</p>
+<p><strong>Prova:</strong> um excerto do chat na captura, a sua mensagem original, a chave César e o resultado Vigenère.</p>
+<p><strong>Conclui:</strong> distingue César, substituição fixa e Vigenère. No chat, todos os clientes recebem a mesma proteção? Como seria afetada a segurança se um participante divulgasse o mapa? Um resultado legível obtido com uma chave conhecida demonstra que a cifra foi quebrada sem chave?</p>
+<p>Fecha os clientes com <code>/sair</code> e o servidor com Ctrl+C.</p>
+<h2>2. «Passámos para AES. Está resolvido?»</h2>
+<p>A empresa propõe substituir a cifra antiga por AES. Antes de aprovar, testa o comportamento dos modos.</p>
+<p><strong>Prevê:</strong> quatro blocos iguais darão quatro blocos cifrados iguais em qualquer modo?</p>
+<pre><code class="language-text">.venv/bin/python ferramentas/Pratica_1/challenge-03/block_ciphers.py &quot;Olá!&quot;
+.venv/bin/python ferramentas/Pratica_1/challenge-03/block_ciphers.py &quot;AAAAAAAAAAAAAAAA&quot;
+.venv/bin/python ferramentas/Pratica_1/challenge-04/aes_modes.py
+.venv/bin/python ferramentas/Pratica_1/challenge-05/modes_comparison.py
+</code></pre>
+<p>Regista o número de caracteres e bytes de <code>Olá!</code> e o padding dos dois exemplos. Compara os blocos repetidos em ECB/CBC, a alteração do IV e os blocos afetados pela alteração de um bit nos quatro modos. CFB nesta experiência usa feedback de 128 bits. Os índices de bytes começam em 0; os blocos são numerados a partir de 1.</p>
+<p><strong>Prova:</strong> um resultado de padding, um exemplo de repetição em ECB e a comparação dos blocos afetados pela adulteração.</p>
+<p><strong>Conclui:</strong> qual é a diferença entre ocultar o conteúdo e detetar alterações? Se a decifragem não produzir erro, podes concluir que ninguém alterou a mensagem? DES seria uma alternativa adequada a AES? Distingue tamanho do bloco de tamanho da chave.</p>
+<p><strong>Se acabares cedo:</strong></p>
+<pre><code class="language-text">.venv/bin/python ferramentas/Pratica_1/challenge-04/bonus_bmp.py
+</code></pre>
+<p>Abre as imagens em <code>ferramentas/Pratica_1/evidence/bmp/</code> e escolhe uma comparação que ajude a explicar ECB.</p>
+<h2>3. Combinar um segredo numa rede observada</h2>
+<p>Agora a equipa tem outro problema: como combinar um segredo sem o enviar diretamente?</p>
+<p><strong>Prevê:</strong> quais dos valores públicos e privados esperas encontrar na captura?</p>
+<p>Num terminal, inicia Bob:</p>
+<pre><code class="language-text">.venv/bin/python ferramentas/Diffie_Hellman/servidor.py --porta 5050 --segredo 7
+</code></pre>
+<p>Inicia uma captura loopback com <code>tcp port 5050 or tcp port 6060</code>. Noutro terminal, inicia Alice:</p>
+<pre><code class="language-text">.venv/bin/python ferramentas/Diffie_Hellman/cliente.py --porta 5050 --segredo 6 --mensagem &quot;Autorizar envio do relatorio&quot;
+</code></pre>
+<p>Guarda <code>03_dh_direto.pcapng</code>. Identifica SYN, SYN/ACK e ACK, os valores <code>p</code>, <code>g</code>, <code>A</code>, <code>B</code>, o campo <code>texto</code> e o MAC. Compara o segredo mostrado nos terminais com o conteúdo da captura.</p>
+<p>Executa o observador com os valores A e B que recolheste. Com os segredos indicados, o comando será:</p>
+<pre><code class="language-text">.venv/bin/python ferramentas/Diffie_Hellman/observador.py --A 8 --B 17
+</code></pre>
+<p><strong>Incidente rápido:</strong> reinicia Bob. Executa Alice com <code>--porta 5051</code> em vez de <code>5050</code>. Regista o erro e corrige o destino. Não confundas o erro de ligação com uma falha da matemática de DH.</p>
+<h3>Um terceiro entra na conversa</h3>
+<p>Abre três terminais. Confirma que a execução anterior de Bob terminou. Inicia novamente a captura loopback.</p>
+<p>Terminal 1:</p>
+<pre><code class="language-text">.venv/bin/python ferramentas/Diffie_Hellman/servidor.py --porta 5050 --segredo 7
+</code></pre>
+<p>Terminal 2:</p>
+<pre><code class="language-text">.venv/bin/python ferramentas/Diffie_Hellman/mitm.py --porta 6060 --porta-servidor 5050 --alterar
+</code></pre>
+<p>Terminal 3:</p>
+<pre><code class="language-text">.venv/bin/python ferramentas/Diffie_Hellman/cliente.py --porta 6060 --segredo 6 --mensagem &quot;Autorizar envio do relatorio&quot;
+</code></pre>
+<p>Guarda <code>03_dh_intermediario.pcapng</code>. Compara o texto enviado por Alice com o aceite por Bob, os segredos dos participantes e as duas ligações TCP.</p>
+<p><strong>Prova:</strong> valores públicos de uma troca, segredo recuperado pelo observador, diagnóstico da porta errada e mensagens antes/depois da intervenção.</p>
+<p><strong>Conclui:</strong> o segredo foi transmitido diretamente ou calculado? Porque o observador consegue recuperá-lo neste laboratório? O campo <code>texto</code> está cifrado? Um MAC válido prova a identidade de Alice quando a troca de chaves não é autenticada? Propõe uma forma de autenticar os participantes.</p>
+<p>O intermediário é um proxy explícito: Alice liga deliberadamente à sua porta. Os parâmetros pequenos são didáticos. Este programa usa texto em claro com HMAC; não implementa um chat cifrado seguro.</p>
+<h2>4–6. Missão de hacking ético — auditar o portal</h2>
+<p>A empresa autorizou uma auditoria às três bancadas Web fornecidas. O contrato pede que investigues <strong>ficheiros, login e perfis</strong>, demonstres pelo menos <strong>duas falhas diferentes</strong> e confirmes as correções. Uma suspeita sem prova deve ficar identificada como suspeita.</p>
+<h3>Contrato e regras de intervenção</h3>
+<ul>
+<li><strong>Alvo autorizado:</strong> exclusivamente as aplicações fornecidas em <code>http://127.0.0.1:5080/</code>, no teu computador. Os três serviços são executados um de cada vez.</li>
+<li><strong>Permitido:</strong> navegar, observar pedidos no separador Network/Rede, alterar parâmetros do endereço, executar a ferramenta de tentativas fornecida e capturar o teu tráfego de laboratório.</li>
+<li><strong>Dados de teste:</strong> contas e documentos fictícios. O ficheiro <code>root_secret.txt</code> da bancada de ficheiros foi colocado propositadamente fora da pasta pública e faz parte do âmbito.</li>
+<li><strong>Limite do login:</strong> uma execução da lista fornecida por versão e um ensaio manual de até cinco falhas, seguido de uma tentativa correta. Aguarda cada resposta. Reinicia a aplicação antes do ensaio manual.</li>
+<li><strong>Fora do âmbito:</strong> outros endereços/serviços, ficheiros do sistema ou pessoais, contas reais, eliminação de dados, persistência e testes de sobrecarga. Não aumentes a lista nem a velocidade das tentativas.</li>
+<li>Regista o que fizeste. Para quando tiveres a prova mínima: não precisas de recolher todos os dados disponíveis.</li>
+</ul>
+<p>Não tens de programar, editar scripts ou criar pedidos em código. As ferramentas de programador do navegador servem aqui para observar a rede; não precisas de usar a consola JavaScript.</p>
+<h3>Dossiê recebido</h3>
+<table>
+<thead>
+<tr>
+<th>Bancada</th>
+<th>Informação inicial</th>
+<th>Pergunta de auditoria</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Ficheiros</td>
+<td>Existe um relatório público; <code>root_secret.txt</code> deve permanecer fora do acesso público</td>
+<td>O portal limita o acesso à pasta autorizada?</td>
+</tr>
+<tr>
+<td>Login</td>
+<td>Utilizador de teste: <code>alice</code>; há uma ferramenta de tentativas fornecida</td>
+<td>A autenticação resiste ao ensaio autorizado? O transporte esconde as credenciais?</td>
+</tr>
+<tr>
+<td>Perfis</td>
+<td>Conta normal: <code>alice</code> / <code>a</code>; existe também o utilizador fictício <code>bob</code></td>
+<td>Um utilizador consegue consultar informação que não lhe pertence?</td>
+</tr>
+</tbody></table>
+<p>As credenciais de Alice no serviço de perfis não são as credenciais do serviço de login. As bancadas não partilham dados, mesmo usando o mesmo endereço local.</p>
+<h3>Preparar a bancada — comandos operacionais</h3>
+<p>Abre as ferramentas de programador do navegador, separador <strong>Network/Rede</strong>. Para registar redirecionamentos, ativa a preservação do registo. Nas capturas Wireshark usa a interface loopback e <code>tcp port 5080</code>.</p>
+<p>Para cada bancada, inicia a versão inicial, investiga, guarda as provas e para o servidor com Ctrl+C. Inicia então a versão protegida e repete <strong>os mesmos testes</strong>, incluindo um uso legítimo. Antes de mudar de aplicação ou versão, fecha todas as janelas privadas e abre uma nova, ou limpa os cookies do endereço: abrir apenas mais uma janela privada pode reutilizar a sessão.</p>
+<p><strong>Bancada de ficheiros:</strong></p>
+<pre><code class="language-text">.venv/bin/python -m flask --app ferramentas/Web/lab1_traversal/app.py run --host 127.0.0.1 --port 5080
+</code></pre>
+<p>Versão protegida:</p>
+<pre><code class="language-text">.venv/bin/python -m flask --app ferramentas/Web/lab1_traversal/app_secure.py run --host 127.0.0.1 --port 5080
+</code></pre>
+<p><strong>Bancada de login:</strong></p>
+<pre><code class="language-text">.venv/bin/python -m flask --app ferramentas/Web/lab2_bruteforce/app.py run --host 127.0.0.1 --port 5080
+</code></pre>
+<p>Versão protegida:</p>
+<pre><code class="language-text">.venv/bin/python -m flask --app ferramentas/Web/lab2_bruteforce/app_secure.py run --host 127.0.0.1 --port 5080
+</code></pre>
+<p><strong>Bancada de perfis:</strong></p>
+<pre><code class="language-text">.venv/bin/python -m flask --app ferramentas/Web/lab3_accesscontrol/app.py run --host 127.0.0.1 --port 5080
+</code></pre>
+<p>Versão protegida:</p>
+<pre><code class="language-text">.venv/bin/python -m flask --app ferramentas/Web/lab3_accesscontrol/app_secure.py run --host 127.0.0.1 --port 5080
+</code></pre>
+<h3>Investigar e demonstrar</h3>
+<p>Em cada bancada, começa por usar uma funcionalidade legítima e observa o endereço e os pedidos. Escreve uma hipótese antes de a testar. Decide que parâmetro, identidade ou sequência de tentativas deves comparar, dentro do contrato.</p>
+<ol>
+<li><strong>Ficheiros:</strong> estabelece um acesso público de referência; investiga se a seleção de ficheiros ultrapassa a pasta autorizada. Guarda o pedido exato e o resultado.</li>
+<li><strong>Login:</strong> localiza e executa a ferramenta de tentativas já fornecida. Identifica o que permite concluir e o que não testa. Observa um POST na captura e planeia um ensaio limitado que permita comparar a proteção das duas versões. Uma mensagem de sucesso nas duas não termina a investigação.</li>
+<li><strong>Perfis:</strong> compara o acesso sem sessão, com Alice ao próprio perfil e com Alice ao recurso de outro utilizador. Procura uma fronteira de permissões: uma recusa isolada não demonstra que todos os recursos estejam protegidos.</li>
+</ol>
+<p>Se ficares bloqueado, consulta <a href="PISTAS.html">as pistas graduais</a>. Começa pelo nível 1 e regista o nível mais alto usado. Pedir uma pista não invalida o trabalho; explica como a usaste.</p>
+<h3>Validar a correção</h3>
+<p>Para cada descoberta, repete na versão protegida o pedido ou a sequência exata que usaste. Confirma também que uma operação legítima continua a funcionar. Distingue «o meu teste deixou de funcionar» de «a aplicação inteira é segura».</p>
+<p><strong>Provas mínimas da auditoria:</strong></p>
+<ul>
+<li>Registo de investigação das três bancadas, mesmo que um resultado fique inconclusivo.</li>
+<li>Pelo menos duas descobertas de natureza diferente, com pedido/ação reproduzível, identidade usada, resultado e impacto.</li>
+<li>Para cada descoberta, comparação antes/depois e um teste legítimo de controlo.</li>
+<li>Uma captura <code>05_login.pcapng</code> com a observação do transporte HTTP, acompanhada da explicação do que é visível.</li>
+<li>Uma conclusão sobre a diferença entre cifragem, autenticação e autorização.</li>
+</ul>
+<p>Preenche as secções 4–6 da ficha. Se não confirmares uma falha, descreve o que testaste e o que falta investigar; não inventes resultados.</p>
+<h2>7. Reunião de resposta ao incidente</h2>
+<p>Apresenta a auditoria à direção com base nas provas recolhidas. A empresa só pode começar por três correções. Escolhe-as e, para cada uma, indica:</p>
+<ol>
+<li>O problema observado e o recurso afetado.</li>
+<li>A prova que recolheste.</li>
+<li>A medida proposta e o que protege.</li>
+<li>Um novo teste que demonstraria a correção e um acesso legítimo que deve continuar a funcionar.</li>
+</ol>
+<p>Responde à direção: <strong>«Se colocarmos HTTPS no portal e AES no chat, todas as falhas que demonstrámos desaparecem?»</strong> Usa três resultados diferentes da vossa investigação.</p>
+<p>Entrega a ficha e as evidências. Não precisas de entregar código.</p>
+</main></html>

@@ -1,0 +1,248 @@
+<!doctype html><html lang="pt-PT"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Operação Rede em Risco — relatório de investigação</title><style>:root{color-scheme:light}*{box-sizing:border-box}body{margin:0;background:#f4f3ef;color:#202e39;font:17px/1.65 system-ui,sans-serif}main{max-width:1000px;margin:40px auto;padding:48px 64px;background:white;border-top:7px solid #157b78}nav{display:flex;flex-wrap:wrap;gap:16px;font-size:14px;border-bottom:1px solid #ddd;padding-bottom:18px}a{color:#096b70}h1{font-size:38px;line-height:1.15;letter-spacing:-1px}h2{margin-top:50px;padding-top:16px;border-top:1px solid #dbe4e2;font-size:26px}h3{font-size:21px}pre{background:#edf3f3;border-left:4px solid #157b78;padding:16px;white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}code{font-size:.88em}table{border-collapse:collapse;width:100%;font-size:14px;display:block;overflow-x:auto}th,td{border:1px solid #d5dfdf;padding:10px 12px;text-align:left}th{background:#e4efed}li{margin:.45em 0}strong{color:#123f45}@media(max-width:700px){main{margin:0;padding:24px}h1{font-size:30px}}@media print{body{background:white;font-size:11pt}main{margin:0;padding:0;border:0;max-width:none}nav{display:none}h2,h3{break-after:avoid}pre,tr{break-inside:avoid}a{color:inherit;text-decoration:none}}</style><main><nav><a href="COMECA_AQUI.html">COMECA AQUI</a><a href="FICHA_RESPOSTAS.html">FICHA RESPOSTAS</a><a href="MISSAO.html">MISSAO</a><a href="PISTAS.html">PISTAS</a></nav><h1>Operação Rede em Risco — relatório de investigação</h1>
+<p>Grupo: ___ · Elementos: ___ · Data: ___</p>
+<p>Em cada prova, indica o nome do ficheiro e o pacote/linha relevante. Cola apenas os excertos necessários e explica o que demonstram.</p>
+<h2>1. Comunicações antigas</h2>
+<ul>
+<li>Previsão inicial: ___</li>
+<li>IP/porta de origem e IP/porta de destino no chat: ___</li>
+<li>Mensagem original e conteúdo observado na captura: ___</li>
+<li>Chave e mensagem recuperada por César: ___</li>
+<li>Resultado Vigenère e confirmação por recifragem: ___</li>
+<li>Diferença entre os três mecanismos e consequências de divulgar o mapa: ___</li>
+<li>Decifrar com chave conhecida é o mesmo que quebrar sem chave? ___</li>
+<li>Evidências: ___</li>
+</ul>
+<h2>2. AES e dados armazenados</h2>
+<table>
+<thead>
+<tr>
+<th>Entrada</th>
+<th align="right">Caracteres</th>
+<th align="right">Bytes UTF-8</th>
+<th align="right">Bytes de padding</th>
+<th align="right">Total após padding</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Olá!</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
+<tr>
+<td>16 letras A</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>Modo</th>
+<th>Tem IV?</th>
+<th>Blocos afetados após alteração de um bit</th>
+<th>Autentica os dados por si só?</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ECB</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CBC</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CFB-128</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>OFB</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<ul>
+<li>Previsão e resultado dos blocos repetidos: ___</li>
+<li>Efeito de alterar o IV: ___</li>
+<li>Diferença entre bloco e chave; comparação DES/AES: ___</li>
+<li>Decifragem sem erro ou padding válido prova integridade? ___</li>
+<li>Evidências: ___</li>
+</ul>
+<h2>3. Rede, Diffie–Hellman e intermediário</h2>
+<ul>
+<li>Previsão: ___</li>
+<li>Pacotes SYN / SYN-ACK / ACK: ___</li>
+<li>p / g / A / B na ligação direta: ___</li>
+<li>Segredos locais de Alice e Bob; resultado do observador: ___</li>
+<li>O texto estava cifrado? Evidência: ___</li>
+<li>Erro com a porta 5051 e correção: ___</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Observação</th>
+<th>Ligação direta</th>
+<th>Com intermediário</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Texto enviado por Alice</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Texto aceite por Bob</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>K de Alice</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>K de Bob</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>K de Mallory com Alice/Bob</td>
+<td>Não aplicável</td>
+<td></td>
+</tr>
+<tr>
+<td>Número de ligações TCP e portas</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<ul>
+<li>Porque o observador recuperou o segredo? ___</li>
+<li>Porque um MAC válido não impediu esta intervenção? ___</li>
+<li>Proposta de autenticação da troca: ___</li>
+<li>Evidências: ___</li>
+</ul>
+<h2>4–6. Relatório de auditoria de hacking ético</h2>
+<p>Confirmámos o âmbito e os limites do contrato: ___</p>
+<h3>Registo de investigação das três bancadas</h3>
+<table>
+<thead>
+<tr>
+<th>Bancada</th>
+<th>Hipótese antes do teste</th>
+<th>Ação/pedido e identidade</th>
+<th>Observação</th>
+<th>Confirmado/inconclusivo</th>
+<th>Pista máxima usada</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Ficheiros</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Login</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Perfis</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h3>Descoberta 1</h3>
+<ul>
+<li>Título e bancada: ___</li>
+<li>Recurso e propriedade de segurança afetados: ___</li>
+<li>Identidade utilizada e acesso que devia ter: ___</li>
+<li>Passos exatos para reproduzir, dentro do âmbito: ___</li>
+<li>Pedido/ação e resultado na versão inicial (inclui HTTP quando aplicável): ___</li>
+<li>Impacto demonstrado; consequências hipotéticas claramente separadas: ___</li>
+<li>Evidência (ficheiro e pacote/linha/pedido): ___</li>
+<li>Correção proposta e justificação: ___</li>
+<li>Mesmo teste na versão protegida e resultado: ___</li>
+<li>Operação legítima de controlo e resultado: ___</li>
+<li>Limites desta prova: ___</li>
+</ul>
+<h3>Descoberta 2</h3>
+<ul>
+<li>Título e bancada: ___</li>
+<li>Recurso e propriedade de segurança afetados: ___</li>
+<li>Identidade utilizada e acesso que devia ter: ___</li>
+<li>Passos exatos para reproduzir, dentro do âmbito: ___</li>
+<li>Pedido/ação e resultado na versão inicial (inclui HTTP quando aplicável): ___</li>
+<li>Impacto demonstrado; consequências hipotéticas claramente separadas: ___</li>
+<li>Evidência (ficheiro e pacote/linha/pedido): ___</li>
+<li>Correção proposta e justificação: ___</li>
+<li>Mesmo teste na versão protegida e resultado: ___</li>
+<li>Operação legítima de controlo e resultado: ___</li>
+<li>Limites desta prova: ___</li>
+</ul>
+<p>Duplica a estrutura se confirmares outras descobertas.</p>
+<h3>Transporte e autenticação</h3>
+<ul>
+<li>Ficheiro <code>05_login.pcapng</code> e pacote/stream relevante: ___</li>
+<li>O que conseguiste observar no POST HTTP? ___</li>
+<li>Resultado da lista original nas duas versões; o que concluis? ___</li>
+<li>Ensaio manual limitado, número de falhas e resultado: ___</li>
+<li>O que HTTPS resolveria e que falhas permaneceriam? ___</li>
+<li>Diferença entre autenticação e autorização, com uma prova desta auditoria: ___</li>
+</ul>
+<h2>7. Decisão da equipa</h2>
+<table>
+<thead>
+<tr>
+<th>Prioridade</th>
+<th>Problema e recurso</th>
+<th>Evidência</th>
+<th>Correção proposta</th>
+<th>Teste de correção e acesso legítimo a manter</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>«HTTPS no portal e AES no chat resolvem todas as falhas?» Justifica com três resultados: ___</p>
+<p>Limitações ou tarefas não concluídas: ___</p>
+</main></html>
